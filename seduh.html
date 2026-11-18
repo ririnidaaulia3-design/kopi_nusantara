@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Panduan seduh kopi dengan timer dan kalkulator rasio.">
+  <title>Kopi Nusantara | Cara Seduh</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="index.html">Kopi<span>Nusantara</span></a>
+      <button id="menu-btn" class="menu-btn" aria-label="Buka menu" aria-expanded="false">&#9776;</button>
+      <nav id="nav" class="nav">
+        <a href="index.html">Home</a>
+        <a href="jenis.html">Jenis Kopi</a>
+        <a href="seduh.html" class="active">Cara Seduh</a>
+        <a href="kontak.html">Kontak</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="container">
+      <p class="eyebrow">Panduan</p>
+      <h1>Cara Seduh Kopi</h1>
+      <p class="lead">Pilih metode, ikuti langkahnya, lalu jalankan timer. Angka di bawah adalah patokan awal, sesuaikan dengan seleramu.</p>
+
+      <div id="metode-tabs" class="tabs" role="group" aria-label="Pilih metode seduh" style="margin-bottom:24px">
+        <button type="button" class="active" data-metode="tubruk">Tubruk</button>
+        <button type="button" data-metode="v60">V60</button>
+        <button type="button" data-metode="french">French Press</button>
+        <button type="button" data-metode="aeropress">Aeropress</button>
+      </div>
+
+      <div class="brew-grid">
+        <section class="panel">
+          <h2 id="info-nama">Tubruk</h2>
+          <div class="stats">
+            <div class="stat"><b id="info-rasio">-</b><span>Rasio kopi:air</span></div>
+            <div class="stat"><b id="info-suhu">-</b><span>Suhu air</span></div>
+            <div class="stat"><b id="info-waktu">-</b><span>Waktu seduh</span></div>
+          </div>
+          <h3>Langkah-langkah</h3>
+          <ol id="langkah" class="steps"></ol>
+
+          <div class="calc">
+            <h3>Kalkulator kopi</h3>
+            <label for="air-ml" class="hint">Jumlah air yang mau kamu seduh (ml)</label>
+            <input id="air-ml" type="number" min="1" step="10" value="250">
+            <p id="hasil-gram" class="calc-result" aria-live="polite"></p>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>Timer Seduh</h2>
+          <div id="timer-display" class="timer-face" aria-live="off">00:00</div>
+          <div class="progress" aria-hidden="true"><span id="timer-bar"></span></div>
+          <div class="timer-btns">
+            <button id="t-start" type="button" class="btn">Mulai</button>
+            <button id="t-reset" type="button" class="btn light">Reset</button>
+          </div>
+          <p class="hint" style="margin-top:16px;text-align:center">Saat waktu habis akan muncul pemberitahuan dan bunyi bip.</p>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; 2026 Kopi Nusantara - dibuat oleh Nama Kamu, XII RPL | Proyek Akhir Cloud Computing</p>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>

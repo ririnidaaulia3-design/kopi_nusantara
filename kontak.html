@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Hubungi tim Kopi Nusantara.">
+  <title>Kopi Nusantara | Kontak</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="index.html">Kopi<span>Nusantara</span></a>
+      <button id="menu-btn" class="menu-btn" aria-label="Buka menu" aria-expanded="false">&#9776;</button>
+      <nav id="nav" class="nav">
+        <a href="index.html">Home</a>
+        <a href="jenis.html">Jenis Kopi</a>
+        <a href="seduh.html">Cara Seduh</a>
+        <a href="kontak.html" class="active">Kontak</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="container">
+      <p class="eyebrow">Hubungi kami</p>
+      <h1>Kontak</h1>
+      <p class="lead">Punya saran kopi daerah yang belum ada, atau mau tanya sesuatu? Tulis pesanmu di sini.</p>
+
+      <div class="contact-grid">
+        <aside class="panel">
+          <h3>Info</h3>
+          <ul class="info-list">
+            <li><strong>Pembuat:</strong> Nama Kamu (XII RPL)</li>
+            <li><strong>Sekolah:</strong> Nama Sekolah</li>
+            <li><strong>Email:</strong> <a href="mailto:emailkamu@example.com">emailkamu@example.com</a></li>
+            <li><strong>GitHub:</strong> <a href="https://github.com/usernamekamu" target="_blank" rel="noopener">github.com/usernamekamu</a></li>
+          </ul>
+          <h3 style="margin-top:22px">Riwayat pesan</h3>
+          <div id="sent-list"></div>
+        </aside>
+
+        <section class="panel">
+          <h2>Kirim Pesan</h2>
+          <form id="contact-form" novalidate>
+            <div class="form-row">
+              <label for="c-name">Nama</label>
+              <input id="c-name" type="text" placeholder="Nama lengkap">
+              <span id="err-name" class="error"></span>
+            </div>
+            <div class="form-row">
+              <label for="c-email">Email</label>
+              <input id="c-email" type="email" placeholder="nama@email.com">
+              <span id="err-email" class="error"></span>
+            </div>
+            <div class="form-row">
+              <label for="c-topic">Topik</label>
+              <select id="c-topic">
+                <option>Saran kopi daerah</option>
+                <option>Pertanyaan cara seduh</option>
+                <option>Lainnya</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label for="c-msg">Pesan</label>
+              <textarea id="c-msg" placeholder="Tulis pesanmu (minimal 10 karakter)"></textarea>
+              <span id="err-msg" class="error"></span>
+            </div>
+            <div class="btn-row">
+              <button type="submit" class="btn">Kirim</button>
+              <button type="reset" class="btn light">Reset</button>
+            </div>
+            <p class="hint" style="margin-top:12px">Draft pesan tersimpan otomatis di browser (localStorage).</p>
+          </form>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; 2026 Kopi Nusantara - dibuat oleh Nama Kamu, XII RPL | Proyek Akhir Cloud Computing</p>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>

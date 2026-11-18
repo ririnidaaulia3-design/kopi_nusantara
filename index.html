@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Kopi Nusantara: kenali jenis kopi dari berbagai daerah Indonesia dan belajar cara menyeduhnya.">
+  <title>Kopi Nusantara | Home</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="index.html">Kopi<span>Nusantara</span></a>
+      <button id="menu-btn" class="menu-btn" aria-label="Buka menu" aria-expanded="false">&#9776;</button>
+      <nav id="nav" class="nav">
+        <a href="index.html" class="active">Home</a>
+        <a href="jenis.html">Jenis Kopi</a>
+        <a href="seduh.html">Cara Seduh</a>
+        <a href="kontak.html">Kontak</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <p class="eyebrow">Dari Sabang sampai Merauke</p>
+          <h1>Kenali <span>kopi Nusantara</span>, satu cangkir demi satu cangkir.</h1>
+          <p class="lead">Jelajahi kopi dari Aceh, Jawa, Bali, Toraja, Flores, sampai Papua, lalu pelajari cara menyeduhnya sendiri di rumah.</p>
+          <div class="btn-row">
+            <a class="btn" href="jenis.html">Lihat Jenis Kopi</a>
+            <a class="btn light" href="seduh.html">Belajar Menyeduh</a>
+          </div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <svg viewBox="0 0 300 260" xmlns="http://www.w3.org/2000/svg">
+            <g fill="none" stroke="#c8803a" stroke-width="6" stroke-linecap="round">
+              <path class="steam" d="M110 70 C95 50 125 40 110 20"/>
+              <path class="steam" d="M150 75 C135 52 165 42 150 18"/>
+              <path class="steam" d="M190 70 C175 50 205 40 190 20"/>
+            </g>
+            <ellipse cx="150" cy="215" rx="115" ry="22" fill="#e6d6bf"/>
+            <path d="M60 90 H240 V150 C240 190 205 210 150 210 C95 210 60 190 60 150 Z" fill="#4a2c1a"/>
+            <path d="M240 105 C285 100 285 160 235 160" fill="none" stroke="#4a2c1a" stroke-width="14" stroke-linecap="round"/>
+            <ellipse cx="150" cy="92" rx="90" ry="14" fill="#7a4a2b"/>
+            <ellipse cx="150" cy="92" rx="76" ry="9" fill="#c8803a"/>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <section class="section alt">
+      <div class="container">
+        <h2>Kenapa kopi Indonesia istimewa?</h2>
+        <div class="grid cols-3">
+          <div class="card feature">
+            <div class="icon">&#9968;</div>
+            <h3>Tanah yang beragam</h3>
+            <p>Gunung berapi, dataran tinggi, dan iklim tropis membuat rasa kopi tiap daerah berbeda.</p>
+          </div>
+          <div class="card feature">
+            <div class="icon">&#127807;</div>
+            <h3>Dua jenis utama</h3>
+            <p>Arabika yang kompleks dan beraroma, serta Robusta yang pahit, kental, dan kuat.</p>
+          </div>
+          <div class="card feature">
+            <div class="icon">&#9749;</div>
+            <h3>Cara seduh khas</h3>
+            <p>Dari kopi tubruk yang sederhana sampai V60 yang rapi, semuanya bisa dicoba di rumah.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <h2>Cari kopi sesuai seleramu</h2>
+        <p class="lead">Pilih rasa yang kamu suka, nanti kami tampilkan kopi yang cocok.</p>
+        <div class="picker">
+          <label for="selera" class="hint">Aku suka rasa yang:</label>
+          <select id="selera">
+            <option value="">-- pilih selera --</option>
+            <option value="manis">Manis dan lembut</option>
+            <option value="segar">Segar dan sedikit asam</option>
+            <option value="kuat">Kuat, pekat, dan pahit</option>
+          </select>
+        </div>
+        <div id="rekom" class="grid cols-auto" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="section alt">
+      <div class="container">
+        <div class="fact-box">
+          <p class="eyebrow" style="color:#e0b080">Tahukah kamu?</p>
+          <p id="fact-text"></p>
+          <button id="fact-btn" class="btn" type="button">Fakta lainnya</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; 2026 Kopi Nusantara - dibuat oleh Nama Kamu, XII RPL | Proyek Akhir Cloud Computing</p>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>
