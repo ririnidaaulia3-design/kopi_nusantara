@@ -1,1128 +1,763 @@
 
-/* ============================================================
-   KOPI NUSANTARA - SCRIPT.JS
-   Fitur:
-   - Menu hamburger
-   - Fakta kopi acak
-   - Rekomendasi kopi
-   - Katalog 17 jenis kopi
-   - Filter daerah dan pencarian
-   - Favorit menggunakan localStorage
-   - Timer seduh
-   - Kalkulator rasio kopi dan air
-   - Form kontak dan validasi
-   ============================================================ */
+/* =====================================================
+   KOPI NUSANTARA
+   SCRIPT.JS - VERSI LENGKAP
+   Dibuat oleh: Ririn Ida Aulia
+   ===================================================== */
 
-(function () {
-  "use strict";
 
-  // ==========================================================
-  // 1. LOCAL STORAGE
-  // ==========================================================
+/* =====================================================
+   1. MENU NAVIGASI HAMBURGER
+   ===================================================== */
 
-  function getStore(key) {
-    try {
-      return localStorage.getItem(key);
-    } catch (e) {
-      return null;
-    }
-  }
+const menuBtn = document.getElementById("menu-btn");
+const nav = document.getElementById("nav");
 
-  function setStore(key, value) {
-    try {
-      localStorage.setItem(key, value);
-    } catch (e) {
-      // Abaikan jika penyimpanan tidak tersedia
-    }
-  }
+if (menuBtn && nav) {
+  menuBtn.addEventListener("click", function () {
+    nav.classList.toggle("open");
 
-  function readJSON(key, fallback) {
-    try {
-      return JSON.parse(getStore(key) || "") || fallback;
-    } catch (e) {
-      return fallback;
-    }
-  }
+    const terbuka = nav.classList.contains("open");
 
-  // ==========================================================
-  // 2. DATA JENIS KOPI NUSANTARA
-  // ==========================================================
-
-  var COFFEES = [
-    {
-      id: "gayo",
-      nama: "Gayo",
-      daerah: "Sumatra",
-      asal: "Aceh Tengah & Bener Meriah, Aceh",
-      jenis: "Arabika",
-      selera: "kuat",
-      profil: "Body tebal dengan aroma rempah dan earthy, keasaman cenderung rendah.",
-      seduh: "Tubruk atau French Press"
-    },
-    {
-      id: "mandailing",
-      nama: "Mandailing",
-      daerah: "Sumatra",
-      asal: "Sumatera Utara",
-      jenis: "Arabika",
-      selera: "kuat",
-      profil: "Body penuh dengan aroma herbal dan cokelat gelap.",
-      seduh: "French Press"
-    },
-    {
-      id: "lampung",
-      nama: "Robusta Lampung",
-      daerah: "Sumatra",
-      asal: "Lampung",
-      jenis: "Robusta",
-      selera: "kuat",
-      profil: "Pahit tegas dengan body kental, cocok untuk kopi susu.",
-      seduh: "Tubruk"
-    },
-    {
-      id: "preanger",
-      nama: "Java Preanger",
-      daerah: "Jawa",
-      asal: "Jawa Barat",
-      jenis: "Arabika",
-      selera: "manis",
-      profil: "Manis lembut dengan aroma cokelat dan karamel ringan.",
-      seduh: "V60"
-    },
-    {
-      id: "malabar",
-      nama: "Malabar",
-      daerah: "Jawa",
-      asal: "Pegunungan Malabar, Jawa Barat",
-      jenis: "Arabika",
-      selera: "segar",
-      profil: "Aroma buah dengan keasaman cerah dan bersih.",
-      seduh: "V60"
-    },
-    {
-      id: "ijen",
-      nama: "Ijen",
-      daerah: "Jawa",
-      asal: "Dataran tinggi Ijen, Jawa Timur",
-      jenis: "Arabika",
-      selera: "segar",
-      profil: "Aroma floral dengan sentuhan jeruk dan rasa manis.",
-      seduh: "V60 atau Aeropress"
-    },
-    {
-      id: "kintamani",
-      nama: "Kintamani",
-      daerah: "Bali",
-      asal: "Kintamani, Bali",
-      jenis: "Arabika",
-      selera: "segar",
-      profil: "Segar dengan nuansa jeruk dan keasaman yang cerah.",
-      seduh: "V60 atau Aeropress"
-    },
-    {
-      id: "toraja",
-      nama: "Toraja",
-      daerah: "Sulawesi",
-      asal: "Tana Toraja, Sulawesi Selatan",
-      jenis: "Arabika",
-      selera: "kuat",
-      profil: "Body penuh dengan rasa kompleks: rempah dan cokelat.",
-      seduh: "French Press"
-    },
-    {
-      id: "bajawa",
-      nama: "Bajawa",
-      daerah: "Nusa Tenggara",
-      asal: "Bajawa, Flores",
-      jenis: "Arabika",
-      selera: "manis",
-      profil: "Cokelat dan rempah dengan body sedang.",
-      seduh: "French Press"
-    },
-    {
-      id: "wamena",
-      nama: "Wamena",
-      daerah: "Papua",
-      asal: "Wamena, Papua",
-      jenis: "Arabika",
-      selera: "manis",
-      profil: "Lembut dan bersih dengan sentuhan cokelat dan buah.",
-      seduh: "V60"
-    },
-
-    // KOPI TAMBAHAN
-
-    {
-      id: "kerinci",
-      nama: "Kerinci",
-      daerah: "Sumatra",
-      asal: "Kerinci, Jambi",
-      jenis: "Arabika",
-      selera: "segar",
-      profil: "Memiliki aroma floral dan buah dengan rasa manis serta keasaman yang segar.",
-      seduh: "V60 atau Aeropress"
-    },
-    {
-      id: "sidikalang",
-      nama: "Sidikalang",
-      daerah: "Sumatra",
-      asal: "Sidikalang, Dairi, Sumatera Utara",
-      jenis: "Arabika",
-      selera: "kuat",
-      profil: "Cenderung memiliki body tebal dengan nuansa cokelat dan rempah.",
-      seduh: "French Press atau Tubruk"
-    },
-    {
-      id: "temanggung",
-      nama: "Robusta Temanggung",
-      daerah: "Jawa",
-      asal: "Temanggung, Jawa Tengah",
-      jenis: "Robusta",
-      selera: "kuat",
-      profil: "Rasa kuat dengan karakter pahit, aroma khas, dan body yang tebal.",
-      seduh: "Tubruk atau kopi susu"
-    },
-    {
-      id: "pupuan",
-      nama: "Kopi Pupuan",
-      daerah: "Bali",
-      asal: "Pupuan, Tabanan, Bali",
-      jenis: "Robusta",
-      selera: "manis",
-      profil: "Memiliki karakter rasa yang cenderung seimbang dengan aroma khas kopi robusta.",
-      seduh: "Tubruk"
-    },
-    {
-      id: "enrekang",
-      nama: "Kalosi Enrekang",
-      daerah: "Sulawesi",
-      asal: "Enrekang, Sulawesi Selatan",
-      jenis: "Arabika",
-      selera: "manis",
-      profil: "Rasa kompleks dengan sentuhan cokelat, rempah, dan keasaman ringan.",
-      seduh: "V60 atau French Press"
-    },
-    {
-      id: "manggarai",
-      nama: "Kopi Manggarai",
-      daerah: "Nusa Tenggara",
-      asal: "Manggarai, Flores, Nusa Tenggara Timur",
-      jenis: "Arabika",
-      selera: "manis",
-      profil: "Memiliki karakter rasa cokelat dan rempah dengan body sedang.",
-      seduh: "French Press atau V60"
-    },
-    {
-      id: "moanemani",
-      nama: "Moanemani",
-      daerah: "Papua",
-      asal: "Moanemani, Papua Tengah",
-      jenis: "Arabika",
-      selera: "segar",
-      profil: "Dikenal dengan karakter rasa lembut, aroma bersih, dan sentuhan buah.",
-      seduh: "V60"
-    }
-  ];
-
-  // ==========================================================
-  // 3. FAKTA KOPI
-  // ==========================================================
-
-  var FAKTA = [
-    "Indonesia termasuk salah satu negara penghasil kopi terbesar di dunia.",
-    "Biji kopi sebenarnya adalah biji dari buah kopi yang disebut cherry.",
-    "Arabika biasanya ditanam di dataran tinggi, sedangkan Robusta tumbuh baik di dataran yang lebih rendah.",
-    "Kopi tubruk adalah cara seduh khas Indonesia: bubuk kopi diseduh langsung di gelas.",
-    "Proses pascapanen (natural, washed, honey) ikut menentukan rasa akhir kopi.",
-    "Tingkat sangrai (light, medium, dark) memengaruhi rasa kopi.",
-    "Air yang terlalu mendidih bisa membuat kopi terasa pahit.",
-    "Kopi memiliki berbagai aroma, mulai dari cokelat, buah, bunga, hingga rempah.",
-    "Kopi dapat diseduh menggunakan berbagai metode, seperti V60 dan French Press."
-  ];
-
-  // ==========================================================
-  // 4. DATA METODE SEDUH
-  // ==========================================================
-
-  var METODE = {
-    tubruk: {
-      nama: "Tubruk",
-      rasio: "1:15",
-      rasioAir: 15,
-      suhu: "90-95°C",
-      detik: 240,
-      langkah: [
-        "Giling kopi cukup halus (seperti bubuk).",
-        "Masukkan kopi ke gelas, tuang air panas, aduk sebentar.",
-        "Mulai timer dan diamkan sampai ampas mengendap.",
-        "Tuang pelan atau minum langsung tanpa mengaduk ampas."
-      ]
-    },
-
-    v60: {
-      nama: "V60",
-      rasio: "1:16",
-      rasioAir: 16,
-      suhu: "92-96°C",
-      detik: 180,
-      langkah: [
-        "Bilas kertas filter dengan air panas, buang airnya.",
-        "Masukkan kopi gilingan medium, ratakan permukaannya.",
-        "Tuang sedikit air (bloom), tunggu sekitar 30 detik.",
-        "Tuang sisa air melingkar pelan sampai takaran habis.",
-        "Tunggu air turun semua, lalu sajikan."
-      ]
-    },
-
-    french: {
-      nama: "French Press",
-      rasio: "1:15",
-      rasioAir: 15,
-      suhu: "93-96°C",
-      detik: 240,
-      langkah: [
-        "Masukkan kopi gilingan kasar ke dalam teko.",
-        "Tuang seluruh air panas, aduk pelan sekali.",
-        "Pasang tutup (jangan ditekan dulu), mulai timer.",
-        "Setelah waktu habis, tekan plunger pelan-pelan.",
-        "Tuang segera agar tidak terlalu lama terendam."
-      ]
-    },
-
-    aeropress: {
-      nama: "Aeropress",
-      rasio: "1:15",
-      rasioAir: 15,
-      suhu: "85-92°C",
-      detik: 120,
-      langkah: [
-        "Pasang filter dan bilas dengan air panas.",
-        "Masukkan kopi gilingan halus-medium.",
-        "Tuang air panas, aduk sebentar, pasang plunger.",
-        "Mulai timer, lalu tekan pelan setelah waktu habis."
-      ]
-    }
-  };
-
-  // ==========================================================
-  // 5. EMOJI KOPI BERTERBANGAN
-  // ==========================================================
-
-  var EMOJIS = [
-    "☕", "☕", "🧋", "🥛", "🍪",
-    "🥐", "🍫", "🌱", "🍰"
-  ];
-
-  (function floatingEmoji() {
-    var layer = document.createElement("div");
-    layer.className = "emoji-layer";
-    layer.setAttribute("aria-hidden", "true");
-
-    var total = window.innerWidth < 640 ? 12 : 24;
-
-    for (var i = 0; i < total; i++) {
-      var s = document.createElement("span");
-
-      s.textContent = EMOJIS[
-        Math.floor(Math.random() * EMOJIS.length)
-      ];
-
-      s.style.left = (Math.random() * 100) + "%";
-      s.style.fontSize = (22 + Math.random() * 34) + "px";
-      s.style.animationDuration = (16 + Math.random() * 20) + "s";
-      s.style.animationDelay = (-Math.random() * 30) + "s";
-
-      s.style.setProperty(
-        "--dx",
-        (Math.random() * 160 - 80) + "px"
-      );
-
-      s.style.setProperty(
-        "--rot",
-        (Math.random() * 720 - 360) + "deg"
-      );
-
-      layer.appendChild(s);
-    }
-
-    document.body.insertBefore(layer, document.body.firstChild);
-  })();
-
-  // ==========================================================
-  // 6. ANIMASI LEDAKAN EMOJI
-  // ==========================================================
-
-  function burst(x, y) {
-    for (var i = 0; i < 12; i++) {
-      var s = document.createElement("span");
-
-      s.className = "burst";
-      s.textContent = EMOJIS[
-        Math.floor(Math.random() * EMOJIS.length)
-      ];
-
-      s.style.left = x + "px";
-      s.style.top = y + "px";
-
-      var angle = (Math.PI * 2 * i) / 12;
-      var dist = 70 + Math.random() * 60;
-
-      s.style.setProperty("--bx", Math.cos(angle) * dist + "px");
-      s.style.setProperty("--by", Math.sin(angle) * dist + "px");
-
-      document.body.appendChild(s);
-
-      (function (el) {
-        setTimeout(function () {
-          el.remove();
-        }, 950);
-      })(s);
-    }
-  }
-
-  // ==========================================================
-  // 7. ANIMASI SAAT SCROLL
-  // ==========================================================
-
-  if ("IntersectionObserver" in window) {
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (en) {
-        if (en.isIntersecting) {
-          en.target.classList.add("in");
-          io.unobserve(en.target);
-        }
-      });
-    }, {
-      threshold: 0.12
-    });
-
-    document.querySelectorAll(
-      ".feature, .panel, .fact-box"
-    ).forEach(function (el) {
-      el.classList.add("reveal");
-      io.observe(el);
-    });
-  }
-
-  // ==========================================================
-  // 8. MENU HAMBURGER
-  // ==========================================================
-
-  var menuBtn = document.getElementById("menu-btn");
-  var nav = document.getElementById("nav");
-
-  if (menuBtn && nav) {
-    menuBtn.addEventListener("click", function () {
-      var open = nav.classList.toggle("open");
-
-      menuBtn.setAttribute(
-        "aria-expanded",
-        String(open)
-      );
-    });
-  }
-
-  // ==========================================================
-  // 9. HOME: FAKTA KOPI ACAK
-  // ==========================================================
-
-  var factText = document.getElementById("fact-text");
-  var factBtn = document.getElementById("fact-btn");
-
-  if (factText && factBtn) {
-    var lastFact = -1;
-
-    function showFact() {
-      var i;
-
-      do {
-        i = Math.floor(Math.random() * FAKTA.length);
-      } while (i === lastFact && FAKTA.length > 1);
-
-      lastFact = i;
-      factText.textContent = FAKTA[i];
-    }
-
-    factBtn.addEventListener("click", function () {
-      showFact();
-
-      var r = factBtn.getBoundingClientRect();
-
-      burst(
-        r.left + r.width / 2,
-        r.top + r.height / 2
-      );
-    });
-
-    showFact();
-  }
-
-  // ==========================================================
-  // 10. HOME: REKOMENDASI KOPI
-  // ==========================================================
-
-  var seleraSel = document.getElementById("selera");
-  var rekomBox = document.getElementById("rekom");
-
-  if (seleraSel && rekomBox) {
-    seleraSel.addEventListener("change", function () {
-      rekomBox.innerHTML = "";
-
-      var pick = seleraSel.value;
-
-      if (!pick) return;
-
-      COFFEES.filter(function (c) {
-        return c.selera === pick;
-      }).forEach(function (c, i) {
-        rekomBox.appendChild(
-          buildCard(c, i, false)
-        );
-      });
-    });
-  }
-
-  // ==========================================================
-  // 11. KARTU KOPI
-  // ==========================================================
-
-  var PALETTES = [
-    ["#7a4a2b", "#c8803a"],
-    ["#4a2c1a", "#a8651f"],
-    ["#8c5a3a", "#d9a066"],
-    ["#5a3822", "#b87333"],
-    ["#6b4226", "#e0b080"]
-  ];
-
-  var favs = readJSON("favKopi", []);
-
-  function saveFavs() {
-    setStore("favKopi", JSON.stringify(favs));
-  }
-
-  function buildCard(c, index, withFav) {
-    var card = document.createElement("article");
-    card.className = "card";
-    card.setAttribute("data-id", c.id);
-
-    // FOTO KOPI
-
-    var foto = document.createElement("div");
-    foto.className = "foto";
-
-    var pal = PALETTES[index % PALETTES.length];
-
-    foto.style.setProperty("--c1", pal[0]);
-    foto.style.setProperty("--c2", pal[1]);
-
-    // Gambar disimpan dalam folder img/
-    foto.style.setProperty(
-      "--img",
-      "url('img/" + c.id + ".jpg')"
+    menuBtn.setAttribute("aria-expanded", terbuka);
+    menuBtn.setAttribute(
+      "aria-label",
+      terbuka ? "Tutup menu" : "Buka menu"
     );
+  });
 
-    var sticker = document.createElement("span");
-    sticker.className = "sticker";
-    sticker.textContent = "☕";
+  nav.querySelectorAll("a").forEach(function (link) {
+    link.addEventListener("click", function () {
+      nav.classList.remove("open");
+      menuBtn.setAttribute("aria-expanded", "false");
+    });
+  });
+}
 
-    foto.appendChild(sticker);
 
-    foto.setAttribute("role", "img");
-    foto.setAttribute("aria-label", "Kopi " + c.nama);
+/* =====================================================
+   2. DATA 28 JENIS KOPI NUSANTARA
+   ===================================================== */
 
-    card.appendChild(foto);
+const COFFEES = [
 
-    // ISI KARTU
+  // SUMATRA
 
-    var body = document.createElement("div");
-    body.className = "card-body";
+  {
+    id: "gayo",
+    nama: "Kopi Gayo",
+    daerah: "Sumatra",
+    asal: "Aceh Tengah dan Bener Meriah, Aceh",
+    jenis: "Arabika",
+    selera: "kuat",
+    profil: "Body tebal dengan aroma rempah dan earthy, serta keasaman cenderung rendah.",
+    seduh: "Tubruk atau French Press"
+  },
+  {
+    id: "mandailing",
+    nama: "Kopi Mandailing",
+    daerah: "Sumatra",
+    asal: "Sumatera Utara",
+    jenis: "Arabika",
+    selera: "kuat",
+    profil: "Body penuh dengan aroma herbal dan cokelat gelap.",
+    seduh: "French Press"
+  },
+  {
+    id: "lampung",
+    nama: "Robusta Lampung",
+    daerah: "Sumatra",
+    asal: "Lampung",
+    jenis: "Robusta",
+    selera: "kuat",
+    profil: "Rasa pahit tegas, body kental, dan aroma kuat.",
+    seduh: "Tubruk"
+  },
+  {
+    id: "kerinci",
+    nama: "Kopi Kerinci",
+    daerah: "Sumatra",
+    asal: "Kerinci, Jambi",
+    jenis: "Arabika",
+    selera: "segar",
+    profil: "Aroma floral dan buah dengan rasa manis serta keasaman segar.",
+    seduh: "V60 atau Aeropress"
+  },
+  {
+    id: "sidikalang",
+    nama: "Kopi Sidikalang",
+    daerah: "Sumatra",
+    asal: "Dairi, Sumatera Utara",
+    jenis: "Arabika",
+    selera: "kuat",
+    profil: "Body tebal dengan nuansa cokelat dan rempah.",
+    seduh: "French Press atau Tubruk"
+  },
+  {
+    id: "lintong",
+    nama: "Kopi Lintong",
+    daerah: "Sumatra",
+    asal: "Humbang Hasundutan, Sumatera Utara",
+    jenis: "Arabika",
+    selera: "kuat",
+    profil: "Aroma herbal dan rempah dengan karakter cokelat.",
+    seduh: "French Press"
+  },
+  {
+    id: "semendo",
+    nama: "Kopi Semendo",
+    daerah: "Sumatra",
+    asal: "Muara Enim, Sumatera Selatan",
+    jenis: "Arabika",
+    selera: "kuat",
+    profil: "Aroma khas dengan karakter rempah dan cokelat.",
+    seduh: "Tubruk"
+  },
+  {
+    id: "besemah",
+    nama: "Kopi Besemah",
+    daerah: "Sumatra",
+    asal: "Pagar Alam, Sumatera Selatan",
+    jenis: "Robusta",
+    selera: "kuat",
+    profil: "Rasa pahit khas robusta dengan body tebal.",
+    seduh: "Tubruk atau Espresso"
+  },
 
-    var h = document.createElement("h3");
-    h.textContent = c.nama;
+  // JAWA
 
-    body.appendChild(h);
+  {
+    id: "preanger",
+    nama: "Java Preanger",
+    daerah: "Jawa",
+    asal: "Jawa Barat",
+    jenis: "Arabika",
+    selera: "manis",
+    profil: "Rasa manis lembut dengan aroma cokelat dan karamel.",
+    seduh: "V60"
+  },
+  {
+    id: "malabar",
+    nama: "Kopi Malabar",
+    daerah: "Jawa",
+    asal: "Pegunungan Malabar, Jawa Barat",
+    jenis: "Arabika",
+    selera: "segar",
+    profil: "Aroma buah dengan keasaman cerah dan rasa bersih.",
+    seduh: "V60"
+  },
+  {
+    id: "ijen",
+    nama: "Kopi Ijen",
+    daerah: "Jawa",
+    asal: "Dataran Tinggi Ijen, Jawa Timur",
+    jenis: "Arabika",
+    selera: "segar",
+    profil: "Aroma floral dengan sentuhan jeruk dan rasa manis.",
+    seduh: "V60 atau Aeropress"
+  },
+  {
+    id: "temanggung",
+    nama: "Robusta Temanggung",
+    daerah: "Jawa",
+    asal: "Temanggung, Jawa Tengah",
+    jenis: "Robusta",
+    selera: "kuat",
+    profil: "Rasa kuat dengan karakter pahit dan body tebal.",
+    seduh: "Tubruk"
+  },
+  {
+    id: "argopuro",
+    nama: "Kopi Argopuro",
+    daerah: "Jawa",
+    asal: "Pegunungan Argopuro, Jawa Timur",
+    jenis: "Arabika",
+    selera: "segar",
+    profil: "Memiliki karakter aroma floral dan fruity.",
+    seduh: "V60"
+  },
+  {
+    id: "java-robusta",
+    nama: "Robusta Jawa",
+    daerah: "Jawa",
+    asal: "Jawa Timur",
+    jenis: "Robusta",
+    selera: "kuat",
+    profil: "Rasa pekat dan pahit dengan aroma khas cokelat.",
+    seduh: "Tubruk atau Espresso"
+  },
 
-    // LABEL DAERAH DAN JENIS
+  // BALI
 
-    var meta = document.createElement("div");
-    meta.className = "meta";
+  {
+    id: "kintamani",
+    nama: "Kopi Kintamani",
+    daerah: "Bali",
+    asal: "Kintamani, Bali",
+    jenis: "Arabika",
+    selera: "segar",
+    profil: "Segar dengan nuansa jeruk dan keasaman cerah.",
+    seduh: "V60 atau Aeropress"
+  },
+  {
+    id: "pupuan",
+    nama: "Kopi Pupuan",
+    daerah: "Bali",
+    asal: "Pupuan, Tabanan, Bali",
+    jenis: "Robusta",
+    selera: "manis",
+    profil: "Memiliki karakter rasa seimbang dengan aroma khas.",
+    seduh: "Tubruk"
+  },
 
-    var b1 = document.createElement("span");
-    b1.className = "badge";
-    b1.textContent = c.daerah;
+  // SULAWESI
 
-    var b2 = document.createElement("span");
-    b2.className = "badge";
-    b2.textContent = c.jenis;
+  {
+    id: "toraja",
+    nama: "Kopi Toraja",
+    daerah: "Sulawesi",
+    asal: "Tana Toraja, Sulawesi Selatan",
+    jenis: "Arabika",
+    selera: "kuat",
+    profil: "Body penuh dengan rasa kompleks, rempah dan cokelat.",
+    seduh: "French Press"
+  },
+  {
+    id: "enrekang",
+    nama: "Kopi Kalosi Enrekang",
+    daerah: "Sulawesi",
+    asal: "Enrekang, Sulawesi Selatan",
+    jenis: "Arabika",
+    selera: "manis",
+    profil: "Rasa kompleks dengan sentuhan cokelat dan rempah.",
+    seduh: "V60 atau French Press"
+  },
+  {
+    id: "mamasa",
+    nama: "Kopi Mamasa",
+    daerah: "Sulawesi",
+    asal: "Mamasa, Sulawesi Barat",
+    jenis: "Arabika",
+    selera: "segar",
+    profil: "Memiliki karakter rasa seimbang dengan aroma khas.",
+    seduh: "V60"
+  },
+  {
+    id: "enrekang-robusta",
+    nama: "Robusta Enrekang",
+    daerah: "Sulawesi",
+    asal: "Enrekang, Sulawesi Selatan",
+    jenis: "Robusta",
+    selera: "kuat",
+    profil: "Rasa pekat dengan karakter pahit dan aroma kuat.",
+    seduh: "Tubruk"
+  },
 
-    meta.appendChild(b1);
-    meta.appendChild(b2);
+  // NUSA TENGGARA
 
-    body.appendChild(meta);
+  {
+    id: "bajawa",
+    nama: "Kopi Bajawa",
+    daerah: "Nusa Tenggara",
+    asal: "Ngada, Flores, Nusa Tenggara Timur",
+    jenis: "Arabika",
+    selera: "manis",
+    profil: "Aroma cokelat dan rempah dengan body sedang.",
+    seduh: "French Press"
+  },
+  {
+    id: "manggarai",
+    nama: "Kopi Manggarai",
+    daerah: "Nusa Tenggara",
+    asal: "Manggarai, Flores, Nusa Tenggara Timur",
+    jenis: "Arabika",
+    selera: "manis",
+    profil: "Karakter rasa cokelat dan rempah dengan body sedang.",
+    seduh: "French Press atau V60"
+  },
+  {
+    id: "tambora",
+    nama: "Kopi Tambora",
+    daerah: "Nusa Tenggara",
+    asal: "Sumbawa, Nusa Tenggara Barat",
+    jenis: "Arabika",
+    selera: "segar",
+    profil: "Memiliki karakter aroma khas dan rasa seimbang.",
+    seduh: "V60"
+  },
+  {
+    id: "flores",
+    nama: "Kopi Flores",
+    daerah: "Nusa Tenggara",
+    asal: "Flores, Nusa Tenggara Timur",
+    jenis: "Arabika",
+    selera: "manis",
+    profil: "Memiliki sentuhan cokelat, karamel, dan kacang.",
+    seduh: "V60 atau French Press"
+  },
 
-    // ASAL KOPI
+  // PAPUA
 
-    var asal = document.createElement("p");
-    asal.className = "hint";
-    asal.textContent = "Asal: " + c.asal;
-
-    body.appendChild(asal);
-
-    // PROFIL RASA
-
-    var p = document.createElement("p");
-    p.textContent = c.profil;
-
-    body.appendChild(p);
-
-    // BAGIAN BAWAH KARTU
-
-    var foot = document.createElement("div");
-    foot.className = "card-foot";
-
-    var tip = document.createElement("span");
-    tip.className = "hint";
-    tip.textContent = "Seduh: " + c.seduh;
-
-    foot.appendChild(tip);
-
-    // TOMBOL FAVORIT
-
-    if (withFav) {
-      var fb = document.createElement("button");
-
-      fb.type = "button";
-      fb.className = "fav-btn";
-
-      function paint() {
-        var on = favs.indexOf(c.id) !== -1;
-
-        fb.classList.toggle("on", on);
-
-        fb.textContent = on
-          ? "★ Favorit"
-          : "☆ Suka";
-
-        fb.setAttribute("aria-pressed", String(on));
-      }
-
-      fb.addEventListener("click", function () {
-        var pos = favs.indexOf(c.id);
-
-        if (pos === -1) {
-          favs.push(c.id);
-
-          var r = fb.getBoundingClientRect();
-
-          burst(
-            r.left + r.width / 2,
-            r.top + r.height / 2
-          );
-        } else {
-          favs.splice(pos, 1);
-        }
-
-        saveFavs();
-        paint();
-
-        if (typeof refreshJenis === "function") {
-          refreshJenis(true);
-        }
-      });
-
-      paint();
-      foot.appendChild(fb);
-    }
-
-    body.appendChild(foot);
-    card.appendChild(body);
-
-    return card;
+  {
+    id: "wamena",
+    nama: "Kopi Wamena",
+    daerah: "Papua",
+    asal: "Wamena, Papua Pegunungan",
+    jenis: "Arabika",
+    selera: "manis",
+    profil: "Lembut dan bersih dengan sentuhan cokelat dan buah.",
+    seduh: "V60"
+  },
+  {
+    id: "moanemani",
+    nama: "Kopi Moanemani",
+    daerah: "Papua",
+    asal: "Moanemani, Papua Tengah",
+    jenis: "Arabika",
+    selera: "segar",
+    profil: "Karakter rasa lembut, aroma bersih, dan sentuhan buah.",
+    seduh: "V60"
+  },
+  {
+    id: "dogiyai",
+    nama: "Kopi Dogiyai",
+    daerah: "Papua",
+    asal: "Dogiyai, Papua Tengah",
+    jenis: "Arabika",
+    selera: "manis",
+    profil: "Memiliki aroma khas dan sentuhan rasa cokelat.",
+    seduh: "V60"
+  },
+  {
+    id: "nabire",
+    nama: "Kopi Nabire",
+    daerah: "Papua",
+    asal: "Nabire, Papua Tengah",
+    jenis: "Arabika",
+    selera: "segar",
+    profil: "Memiliki karakter aroma kopi pegunungan dengan rasa seimbang.",
+    seduh: "French Press atau V60"
   }
 
-  // ==========================================================
-  // 12. JENIS KOPI: FILTER, TAB DAN PENCARIAN
-  // ==========================================================
+];
 
-  var grid = document.getElementById("grid");
-  var refreshJenis = null;
 
-  if (grid) {
-    var tabsBox = document.getElementById("tabs");
-    var searchEl = document.getElementById("search");
-    var countEl = document.getElementById("count");
+/* =====================================================
+   3. PENYIMPANAN FAVORIT
+   ===================================================== */
 
-    var state = {
-      daerah: "Semua",
-      q: ""
-    };
+const STORAGE_KEY = "kopiNusantaraFavorites";
 
-    var tabs = tabsBox.querySelectorAll("button");
+function getFavorites() {
+  try {
+    return JSON.parse(
+      localStorage.getItem(STORAGE_KEY)
+    ) || [];
+  } catch (error) {
+    return [];
+  }
+}
 
-    // FILTER DAERAH
+function saveFavorites(data) {
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(data)
+  );
+}
 
-    tabs.forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        tabs.forEach(function (b) {
-          b.classList.remove("active");
-        });
+let favorites = getFavorites();
 
-        btn.classList.add("active");
+function isFavorite(id) {
+  return favorites.includes(id);
+}
 
-        state.daerah = btn.getAttribute("data-daerah");
-
-        render();
-      });
+function toggleFavorite(id) {
+  if (isFavorite(id)) {
+    favorites = favorites.filter(function (item) {
+      return item !== id;
     });
-
-    // PENCARIAN KOPI
-
-    searchEl.addEventListener("input", function () {
-      state.q = searchEl.value.trim().toLowerCase();
-
-      render();
-    });
-
-    // MENAMPILKAN DATA KOPI
-
-    function render(keepScroll) {
-      var list = COFFEES.filter(function (c) {
-        var okDaerah =
-          state.daerah === "Semua" ||
-          (
-            state.daerah === "Favorit"
-              ? favs.indexOf(c.id) !== -1
-              : c.daerah === state.daerah
-          );
-
-        var hay = (
-          c.nama + " " +
-          c.asal + " " +
-          c.profil + " " +
-          c.jenis + " " +
-          c.daerah
-        ).toLowerCase();
-
-        return okDaerah &&
-          (!state.q || hay.indexOf(state.q) !== -1);
-      });
-
-      grid.innerHTML = "";
-
-      list.forEach(function (c) {
-        grid.appendChild(
-          buildCard(c, COFFEES.indexOf(c), true)
-        );
-      });
-
-      countEl.textContent =
-        "Menampilkan " + list.length +
-        " dari " + COFFEES.length +
-        " jenis kopi";
-
-      // JIKA DATA TIDAK DITEMUKAN
-
-      if (!list.length) {
-        var e = document.createElement("p");
-
-        e.className = "empty";
-
-        e.textContent =
-          state.daerah === "Favorit" && !state.q
-            ? "Belum ada favorit. Tekan tombol Suka pada kopi yang kamu mau."
-            : "Tidak ada kopi yang cocok. Coba kata kunci lain.";
-
-        grid.appendChild(e);
-      }
-    }
-
-    refreshJenis = render;
-
-    render();
+  } else {
+    favorites.push(id);
   }
 
-  // ==========================================================
-  // 13. SEDUH: TIMER DAN KALKULATOR
-  // ==========================================================
+  saveFavorites(favorites);
+  renderCoffees();
+}
 
-  var timerEl = document.getElementById("timer-display");
 
-  if (timerEl) {
-    var current = "tubruk";
+/* =====================================================
+   4. TAMPILAN KARTU KOPI
+   ===================================================== */
 
-    var total = 0;
-    var sisa = 0;
-    var handle = null;
+const grid = document.getElementById("grid");
+const searchInput = document.getElementById("search");
+const count = document.getElementById("count");
+const tabs = document.getElementById("tabs");
 
-    var barEl = document.getElementById("timer-bar");
-    var startBtn = document.getElementById("t-start");
-    var resetBtn = document.getElementById("t-reset");
-    var stepsEl = document.getElementById("langkah");
-    var methodTabs = document.querySelectorAll(
-      "#metode-tabs button"
+let activeRegion = "Semua";
+
+function createCoffeeCard(coffee) {
+  const favorite = isFavorite(coffee.id);
+
+  return `
+    <article class="card coffee-card">
+
+      <div class="coffee-icon" aria-hidden="true">
+        ☕
+      </div>
+
+      <div class="coffee-info">
+
+        <span class="eyebrow">
+          ${coffee.daerah}
+        </span>
+
+        <h3>${coffee.nama}</h3>
+
+        <p>
+          <strong>Asal:</strong>
+          ${coffee.asal}
+        </p>
+
+        <p>
+          <strong>Jenis:</strong>
+          ${coffee.jenis}
+        </p>
+
+        <p>
+          ${coffee.profil}
+        </p>
+
+        <p>
+          <strong>Rekomendasi seduh:</strong>
+          ${coffee.seduh}
+        </p>
+
+        <button
+          type="button"
+          class="btn ${favorite ? "light" : ""}"
+          data-favorite="${coffee.id}"
+          aria-pressed="${favorite}"
+        >
+          ${favorite ? "★ Disukai" : "☆ Suka"}
+        </button>
+
+      </div>
+    </article>
+  `;
+}
+
+function renderCoffees() {
+  if (!grid) return;
+
+  const keyword = searchInput
+    ? searchInput.value.toLowerCase().trim()
+    : "";
+
+  let filtered = COFFEES.filter(function (coffee) {
+
+    const cocokDaerah =
+      activeRegion === "Semua" ||
+      coffee.daerah === activeRegion;
+
+    const cocokFavorit =
+      activeRegion !== "Favorit" ||
+      isFavorite(coffee.id);
+
+    const cocokPencarian =
+      coffee.nama.toLowerCase().includes(keyword) ||
+      coffee.asal.toLowerCase().includes(keyword) ||
+      coffee.jenis.toLowerCase().includes(keyword) ||
+      coffee.profil.toLowerCase().includes(keyword);
+
+    return (
+      (activeRegion === "Favorit"
+        ? cocokFavorit
+        : cocokDaerah) &&
+      cocokPencarian
     );
+  });
 
-    var airInput = document.getElementById("air-ml");
-    var hasilEl = document.getElementById("hasil-gram");
+  grid.innerHTML = filtered.map(createCoffeeCard).join("");
 
-    // FORMAT WAKTU
+  if (count) {
+    count.textContent =
+      `Menampilkan ${filtered.length} dari ${COFFEES.length} jenis kopi`;
+  }
+}
 
-    function fmt(s) {
-      var m = Math.floor(s / 60);
-      var d = s % 60;
+if (tabs) {
+  tabs.querySelectorAll("[data-daerah]").forEach(function (button) {
 
-      return (
-        (m < 10 ? "0" : "") + m +
-        ":" +
-        (d < 10 ? "0" : "") + d
-      );
-    }
+    button.addEventListener("click", function () {
 
-    // TAMPILAN TIMER
+      activeRegion = button.dataset.daerah;
 
-    function paintTimer() {
-      timerEl.textContent = fmt(sisa);
-
-      barEl.style.width =
-        (total ? ((total - sisa) / total) * 100 : 0) + "%";
-    }
-
-    // MENGHENTIKAN TIMER
-
-    function stopTimer() {
-      if (handle) {
-        clearInterval(handle);
-        handle = null;
-      }
-
-      startBtn.textContent = "Mulai";
-    }
-
-    // SUARA TIMER SELESAI
-
-    function beep() {
-      try {
-        var Ctx = window.AudioContext ||
-          window.webkitAudioContext;
-
-        var ctx = new Ctx();
-
-        var osc = ctx.createOscillator();
-
-        osc.frequency.value = 880;
-        osc.connect(ctx.destination);
-        osc.start();
-
-        setTimeout(function () {
-          osc.stop();
-          ctx.close();
-        }, 500);
-
-      } catch (e) {
-        // Abaikan jika suara tidak tersedia
-      }
-    }
-
-    // KALKULATOR KOPI DAN AIR
-
-    function updateCalc() {
-      var ml = parseFloat(airInput.value);
-
-      if (!ml || ml <= 0) {
-        hasilEl.textContent = "Isi jumlah air dulu.";
-        return;
-      }
-
-      var gram = ml / METODE[current].rasioAir;
-
-      hasilEl.textContent =
-        "Kopi yang dibutuhkan: sekitar " +
-        gram.toFixed(1) + " gram";
-    }
-
-    // MEMILIH METODE SEDUH
-
-    function setMetode(key) {
-      current = key;
-
-      var m = METODE[key];
-
-      stopTimer();
-
-      total = sisa = m.detik;
-
-      document.getElementById("info-nama").textContent =
-        m.nama;
-
-      document.getElementById("info-rasio").textContent =
-        m.rasio;
-
-      document.getElementById("info-suhu").textContent =
-        m.suhu;
-
-      document.getElementById("info-waktu").textContent =
-        fmt(m.detik);
-
-      stepsEl.innerHTML = "";
-
-      m.langkah.forEach(function (t) {
-        var li = document.createElement("li");
-
-        li.textContent = t;
-
-        stepsEl.appendChild(li);
+      tabs.querySelectorAll("button").forEach(function (btn) {
+        btn.classList.remove("active");
       });
 
-      paintTimer();
-      updateCalc();
+      button.classList.add("active");
+
+      renderCoffees();
+    });
+  });
+}
+
+if (searchInput) {
+  searchInput.addEventListener("input", renderCoffees);
+}
+
+if (grid) {
+  grid.addEventListener("click", function (event) {
+
+    const button = event.target.closest("[data-favorite]");
+
+    if (!button) return;
+
+    toggleFavorite(button.dataset.favorite);
+  });
+}
+
+renderCoffees();
+
+
+/* =====================================================
+   5. REKOMENDASI KOPI BERDASARKAN SELERA
+   ===================================================== */
+
+const selera = document.getElementById("selera");
+const rekom = document.getElementById("rekom");
+
+if (selera && rekom) {
+
+  selera.addEventListener("change", function () {
+
+    const pilihan = selera.value;
+
+    if (!pilihan) {
+      rekom.innerHTML = "";
+      return;
     }
 
-    // TAB METODE SEDUH
-
-    methodTabs.forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        methodTabs.forEach(function (b) {
-          b.classList.remove("active");
-        });
-
-        btn.classList.add("active");
-
-        setMetode(btn.getAttribute("data-metode"));
-      });
+    const hasil = COFFEES.filter(function (coffee) {
+      return coffee.selera === pilihan;
     });
 
-    // TOMBOL MULAI DAN JEDA
+    if (hasil.length === 0) {
+      rekom.innerHTML = "<p>Belum ada rekomendasi kopi.</p>";
+      return;
+    }
 
-    startBtn.addEventListener("click", function () {
-      if (handle) {
-        stopTimer();
-        startBtn.textContent = "Lanjut";
-        return;
-      }
+    rekom.innerHTML = hasil.slice(0, 6).map(function (coffee) {
 
-      if (sisa <= 0) {
-        sisa = total;
-      }
+      return `
+        <article class="card feature">
+          <div class="icon">☕</div>
+          <h3>${coffee.nama}</h3>
+          <p><strong>Daerah:</strong> ${coffee.daerah}</p>
+          <p>${coffee.profil}</p>
+          <p><strong>Metode seduh:</strong> ${coffee.seduh}</p>
+        </article>
+      `;
 
-      startBtn.textContent = "Jeda";
+    }).join("");
 
-      handle = setInterval(function () {
-        sisa--;
+  });
+}
 
-        paintTimer();
 
-        if (sisa <= 0) {
-          stopTimer();
-          beep();
+/* =====================================================
+   6. FAKTA KOPI ACAK
+   ===================================================== */
 
-          alert(
-            "Waktu seduh " +
-            METODE[current].nama +
-            " selesai! Kopimu siap disajikan."
-          );
-        }
-      }, 1000);
-    });
+const facts = [
+  "Indonesia merupakan salah satu negara penghasil kopi di dunia.",
+  "Arabika umumnya tumbuh baik di dataran tinggi.",
+  "Robusta memiliki kandungan kafein lebih tinggi dibandingkan Arabika.",
+  "Kopi Gayo berasal dari wilayah dataran tinggi Aceh.",
+  "Kopi Kintamani dikenal dengan karakter rasa citrus.",
+  "Kopi Toraja berasal dari Sulawesi Selatan.",
+  "Kopi Bajawa berasal dari Pulau Flores, Nusa Tenggara Timur.",
+  "V60 merupakan salah satu metode penyeduhan manual.",
+  "French Press menggunakan alat dengan penyaring dan penekan.",
+  "Cold Brew dibuat dengan merendam bubuk kopi menggunakan air dingin.",
+  "Ukuran gilingan kopi dapat memengaruhi hasil seduhan.",
+  "Suhu air memengaruhi proses ekstraksi kopi.",
+  "Kopi tubruk merupakan salah satu cara penyajian kopi tradisional Indonesia.",
+  "Kopi Wamena dikenal sebagai salah satu kopi Arabika dari Papua."
+];
 
-    // TOMBOL RESET
+const factText = document.getElementById("fact-text");
+const factBtn = document.getElementById("fact-btn");
 
-    resetBtn.addEventListener("click", function () {
-      stopTimer();
+function showRandomFact() {
 
-      sisa = total;
+  if (!factText) return;
 
-      paintTimer();
-    });
+  const random = Math.floor(Math.random() * facts.length);
 
-    // INPUT AIR
+  factText.textContent = facts[random];
+}
 
-    airInput.addEventListener("input", updateCalc);
+if (factText) {
+  showRandomFact();
+}
 
-    // METODE AWAL
+if (factBtn) {
+  factBtn.addEventListener("click", showRandomFact);
+}
 
-    setMetode("tubruk");
+
+/* =====================================================
+   7. KALKULATOR RASIO KOPI DAN AIR
+   Digunakan jika elemen tersedia di halaman seduh.
+   ===================================================== */
+
+const coffeeAmount = document.getElementById("coffee-amount");
+const coffeeRatio = document.getElementById("coffee-ratio");
+const ratioResult = document.getElementById("ratio-result");
+const calculateRatio = document.getElementById("calculate-ratio");
+
+function calculateWater() {
+
+  if (!coffeeAmount || !coffeeRatio || !ratioResult) return;
+
+  const grams = Number(coffeeAmount.value);
+  const ratio = Number(coffeeRatio.value);
+
+  if (grams <= 0 || ratio <= 0) {
+    ratioResult.textContent = "Masukkan jumlah kopi dan rasio yang benar.";
+    return;
   }
 
-  // ==========================================================
-  // 14. KONTAK: FORM DAN VALIDASI
-  // ==========================================================
+  const water = grams * ratio;
 
-  var form = document.getElementById("contact-form");
+  ratioResult.textContent =
+    `Kamu membutuhkan sekitar ${water} ml air.`;
+}
 
-  if (form) {
-    var fName = document.getElementById("c-name");
-    var fEmail = document.getElementById("c-email");
-    var fTopic = document.getElementById("c-topic");
-    var fMsg = document.getElementById("c-msg");
+if (calculateRatio) {
+  calculateRatio.addEventListener("click", calculateWater);
+}
 
-    var sentBox = document.getElementById("sent-list");
 
-    // MENGAMBIL DRAFT PESAN
+/* =====================================================
+   8. TIMER PENYEDUHAN KOPI
+   Digunakan jika elemen timer tersedia.
+   ===================================================== */
 
-    var draft = readJSON("kopiDraft", {});
+const brewStart = document.getElementById("brew-start");
+const brewReset = document.getElementById("brew-reset");
+const brewDisplay = document.getElementById("brew-time");
 
-    if (draft.name) fName.value = draft.name;
-    if (draft.email) fEmail.value = draft.email;
-    if (draft.topic) fTopic.value = draft.topic;
-    if (draft.msg) fMsg.value = draft.msg;
+let brewInterval = null;
+let remainingSeconds = 180;
 
-    // MENYIMPAN DRAFT OTOMATIS
+function displayBrewTime() {
 
-    [
-      fName,
-      fEmail,
-      fTopic,
-      fMsg
-    ].forEach(function (f) {
-      f.addEventListener("input", function () {
-        setStore(
-          "kopiDraft",
-          JSON.stringify({
-            name: fName.value,
-            email: fEmail.value,
-            topic: fTopic.value,
-            msg: fMsg.value
-          })
-        );
-      });
-    });
+  if (!brewDisplay) return;
 
-    // MENAMPILKAN ERROR
+  const minutes = Math.floor(remainingSeconds / 60);
+  const seconds = remainingSeconds % 60;
 
-    function setError(id, text) {
-      document.getElementById(id).textContent = text;
+  brewDisplay.textContent =
+    `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+}
+
+if (brewDisplay) {
+  displayBrewTime();
+}
+
+if (brewStart) {
+
+  brewStart.addEventListener("click", function () {
+
+    if (brewInterval) return;
+
+    if (remainingSeconds <= 0) {
+      remainingSeconds = 180;
     }
 
-    // MENAMPILKAN PESAN TERKIRIM
+    brewInterval = setInterval(function () {
 
-    function renderSent() {
-      var sent = readJSON("kopiSent", []);
+      remainingSeconds--;
 
-      sentBox.innerHTML = "";
+      displayBrewTime();
 
-      if (!sent.length) {
-        var p = document.createElement("p");
+      if (remainingSeconds <= 0) {
 
-        p.className = "hint";
-        p.textContent = "Belum ada pesan terkirim.";
+        clearInterval(brewInterval);
+        brewInterval = null;
 
-        sentBox.appendChild(p);
+        brewDisplay.textContent = "Selesai! Kopi siap dinikmati ☕";
 
-        return;
       }
 
-      sent.slice().reverse().forEach(function (m) {
-        var d = document.createElement("div");
+    }, 1000);
 
-        d.className = "sent-item";
+  });
+}
 
-        var s = document.createElement("small");
+if (brewReset) {
 
-        s.textContent = m.time + " • " + m.topic;
+  brewReset.addEventListener("click", function () {
 
-        var t = document.createElement("span");
+    clearInterval(brewInterval);
+    brewInterval = null;
 
-        t.textContent = m.name + ": " + m.msg;
+    remainingSeconds = 180;
 
-        d.appendChild(s);
-        d.appendChild(t);
+    displayBrewTime();
 
-        sentBox.appendChild(d);
-      });
+  });
+
+}
+
+
+/* =====================================================
+   9. VALIDASI FORM KONTAK
+   ===================================================== */
+
+const contactForm = document.getElementById("contact-form");
+
+if (contactForm) {
+
+  contactForm.addEventListener("submit", function (event) {
+
+    const nama = document.getElementById("nama");
+    const email = document.getElementById("email");
+    const pesan = document.getElementById("pesan");
+
+    if (
+      (nama && !nama.value.trim()) ||
+      (email && !email.value.trim()) ||
+      (pesan && !pesan.value.trim())
+    ) {
+
+      event.preventDefault();
+
+      alert("Mohon lengkapi semua kolom terlebih dahulu.");
+
+      return;
     }
 
-    // PROSES KIRIM FORM
+  });
 
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
+}
 
-      var ok = true;
 
-      setError("err-name", "");
-      setError("err-email", "");
-      setError("err-msg", "");
+/* =====================================================
+   10. INFORMASI JUMLAH KOPI
+   ===================================================== */
 
-      // VALIDASI NAMA
+const totalCoffee = document.getElementById("total-coffee");
 
-      if (fName.value.trim().length < 3) {
-        setError(
-          "err-name",
-          "Nama minimal 3 karakter."
-        );
+if (totalCoffee) {
+  totalCoffee.textContent = COFFEES.length;
+}
 
-        ok = false;
-      }
 
-      // VALIDASI EMAIL
-
-      if (
-        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
-          fEmail.value.trim()
-        )
-      ) {
-        setError(
-          "err-email",
-          "Format email tidak valid."
-        );
-
-        ok = false;
-      }
-
-      // VALIDASI PESAN
-
-      if (fMsg.value.trim().length < 10) {
-        setError(
-          "err-msg",
-          "Pesan minimal 10 karakter."
-        );
-
-        ok = false;
-      }
-
-      if (!ok) {
-        alert(
-          "Form belum benar. Periksa pesan error berwarna merah."
-        );
-
-        return;
-      }
-
-      // SIMPAN PESAN
-
-      var sent = readJSON("kopiSent", []);
-
-      sent.push({
-        name: fName.value.trim(),
-        topic: fTopic.value,
-        msg: fMsg.value.trim(),
-        time: new Date().toLocaleString("id-ID")
-      });
-
-      setStore(
-        "kopiSent",
-        JSON.stringify(sent)
-      );
-
-      setStore("kopiDraft", "{}");
-
-      alert(
-        "Terima kasih, " +
-        fName.value.trim() +
-        "! Pesanmu sudah tersimpan."
-      );
-
-      form.reset();
-
-      renderSent();
-    });
-
-    // RESET FORM
-
-    form.addEventListener("reset", function () {
-      setStore("kopiDraft", "{}");
-    });
-
-    renderSent();
-  }
-
-})();
+/* =====================================================
+   AKHIR SCRIPT KOPI NUSANTARA
+   ===================================================== */
