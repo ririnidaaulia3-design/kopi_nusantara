@@ -1,7 +1,7 @@
 
 /* =====================================================
    KOPI NUSANTARA
-   SCRIPT.JS - VERSI LENGKAP
+   SCRIPT.JS - VERSI LENGKAP 36 JENIS KOPI
    Dibuat oleh: Ririn Ida Aulia
    ===================================================== */
 
@@ -36,7 +36,7 @@ if (menuBtn && nav) {
 
 
 /* =====================================================
-   2. DATA 28 JENIS KOPI NUSANTARA
+   2. DATA 36 JENIS KOPI NUSANTARA
    ===================================================== */
 
 const COFFEES = [
@@ -123,6 +123,27 @@ const COFFEES = [
     profil: "Rasa pahit khas robusta dengan body tebal.",
     seduh: "Tubruk atau Espresso"
   },
+  {
+    id: "kopi-aceh-ulee-kareng",
+    nama: "Kopi Ulee Kareng",
+    daerah: "Sumatra",
+    asal: "Banda Aceh, Aceh",
+    jenis: "Robusta dan Arabika",
+    selera: "kuat",
+    profil: "Memiliki rasa pekat dengan aroma rempah dan karakter kopi tradisional Aceh.",
+    seduh: "Tubruk"
+  },
+  {
+    id: "kopi-lahat",
+    nama: "Kopi Lahat",
+    daerah: "Sumatra",
+    asal: "Lahat, Sumatera Selatan",
+    jenis: "Robusta",
+    selera: "kuat",
+    profil: "Memiliki rasa kuat dengan karakter pahit dan aroma khas.",
+    seduh: "Tubruk"
+  },
+
 
   // JAWA
 
@@ -186,6 +207,27 @@ const COFFEES = [
     profil: "Rasa pekat dan pahit dengan aroma khas cokelat.",
     seduh: "Tubruk atau Espresso"
   },
+  {
+    id: "kopi-gunung-halu",
+    nama: "Kopi Gunung Halu",
+    daerah: "Jawa",
+    asal: "Bandung Barat, Jawa Barat",
+    jenis: "Arabika",
+    selera: "segar",
+    profil: "Memiliki aroma floral dan fruity dengan keasaman yang menyegarkan.",
+    seduh: "V60"
+  },
+  {
+    id: "kopi-dampit",
+    nama: "Kopi Dampit",
+    daerah: "Jawa",
+    asal: "Dampit, Malang, Jawa Timur",
+    jenis: "Robusta",
+    selera: "kuat",
+    profil: "Memiliki body tebal, rasa pahit, dan aroma cokelat.",
+    seduh: "Tubruk atau Espresso"
+  },
+
 
   // BALI
 
@@ -209,6 +251,7 @@ const COFFEES = [
     profil: "Memiliki karakter rasa seimbang dengan aroma khas.",
     seduh: "Tubruk"
   },
+
 
   // SULAWESI
 
@@ -252,6 +295,17 @@ const COFFEES = [
     profil: "Rasa pekat dengan karakter pahit dan aroma kuat.",
     seduh: "Tubruk"
   },
+  {
+    id: "kopi-sinjai",
+    nama: "Kopi Sinjai",
+    daerah: "Sulawesi",
+    asal: "Sinjai, Sulawesi Selatan",
+    jenis: "Arabika",
+    selera: "manis",
+    profil: "Memiliki karakter rasa seimbang dengan aroma khas kopi pegunungan.",
+    seduh: "V60"
+  },
+
 
   // NUSA TENGGARA
 
@@ -295,6 +349,27 @@ const COFFEES = [
     profil: "Memiliki sentuhan cokelat, karamel, dan kacang.",
     seduh: "V60 atau French Press"
   },
+  {
+    id: "kopi-sumbawa",
+    nama: "Kopi Sumbawa",
+    daerah: "Nusa Tenggara",
+    asal: "Sumbawa, Nusa Tenggara Barat",
+    jenis: "Robusta",
+    selera: "kuat",
+    profil: "Memiliki karakter rasa pekat dengan aroma khas dan body cukup tebal.",
+    seduh: "Tubruk"
+  },
+  {
+    id: "kopi-alor",
+    nama: "Kopi Alor",
+    daerah: "Nusa Tenggara",
+    asal: "Alor, Nusa Tenggara Timur",
+    jenis: "Arabika",
+    selera: "segar",
+    profil: "Memiliki karakter aroma khas dengan rasa seimbang dan sentuhan buah.",
+    seduh: "V60 atau French Press"
+  },
+
 
   // PAPUA
 
@@ -337,6 +412,16 @@ const COFFEES = [
     selera: "segar",
     profil: "Memiliki karakter aroma kopi pegunungan dengan rasa seimbang.",
     seduh: "French Press atau V60"
+  },
+  {
+    id: "kopi-baliem",
+    nama: "Kopi Lembah Baliem",
+    daerah: "Papua",
+    asal: "Lembah Baliem, Papua Pegunungan",
+    jenis: "Arabika",
+    selera: "manis",
+    profil: "Memiliki karakter rasa lembut dengan aroma khas dan sentuhan cokelat.",
+    seduh: "V60 atau French Press"
   }
 
 ];
@@ -585,7 +670,11 @@ const facts = [
   "Ukuran gilingan kopi dapat memengaruhi hasil seduhan.",
   "Suhu air memengaruhi proses ekstraksi kopi.",
   "Kopi tubruk merupakan salah satu cara penyajian kopi tradisional Indonesia.",
-  "Kopi Wamena dikenal sebagai salah satu kopi Arabika dari Papua."
+  "Kopi Wamena dikenal sebagai salah satu kopi Arabika dari Papua.",
+  "Kopi Lampung terkenal sebagai salah satu kopi Robusta Indonesia.",
+  "Kopi Flores Bajawa berasal dari daerah Ngada.",
+  "Kopi Mandailing berasal dari Sumatera Utara.",
+  "Kopi Kintamani tumbuh di kawasan dataran tinggi Bali."
 ];
 
 const factText = document.getElementById("fact-text");
@@ -611,7 +700,6 @@ if (factBtn) {
 
 /* =====================================================
    7. KALKULATOR RASIO KOPI DAN AIR
-   Digunakan jika elemen tersedia di halaman seduh.
    ===================================================== */
 
 const coffeeAmount = document.getElementById("coffee-amount");
@@ -644,7 +732,6 @@ if (calculateRatio) {
 
 /* =====================================================
    8. TIMER PENYEDUHAN KOPI
-   Digunakan jika elemen timer tersedia.
    ===================================================== */
 
 const brewStart = document.getElementById("brew-start");
@@ -760,4 +847,5 @@ if (totalCoffee) {
 
 /* =====================================================
    AKHIR SCRIPT KOPI NUSANTARA
+   TOTAL: 36 JENIS KOPI
    ===================================================== */
