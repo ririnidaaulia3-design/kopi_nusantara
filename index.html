@@ -10,6 +10,73 @@
   <title>Kopi Nusantara | Home</title>
 
   <link rel="stylesheet" href="style.css">
+
+  <!-- STYLE TAMBAHAN UNTUK PETA -->
+  <style>
+    .map-section {
+      padding: 75px 0;
+      background: linear-gradient(135deg, #fff4df, #f3dfbd);
+    }
+
+    .map-heading {
+      text-align: center;
+      max-width: 750px;
+      margin: 0 auto 35px;
+    }
+
+    .map-heading h2 {
+      font-size: 32px;
+      color: #4a2c1a;
+      margin-bottom: 15px;
+    }
+
+    .map-heading p {
+      line-height: 1.8;
+      color: #795b45;
+    }
+
+    .map-container {
+      background: #fffaf0;
+      padding: 15px;
+      border: 2px solid #c99a60;
+      border-radius: 18px;
+      box-shadow: 0 12px 30px rgba(74, 44, 26, 0.15);
+      overflow: hidden;
+    }
+
+    .map-container img {
+      display: block;
+      width: 100%;
+      height: auto;
+      min-height: 200px;
+      object-fit: contain;
+      border-radius: 10px;
+    }
+
+    .map-caption {
+      text-align: center;
+      margin-top: 18px;
+      color: #795b45;
+      font-size: 14px;
+      font-style: italic;
+    }
+
+    .map-decoration {
+      text-align: center;
+      font-size: 28px;
+      margin-bottom: 15px;
+    }
+
+    @media (max-width: 600px) {
+      .map-heading h2 {
+        font-size: 25px;
+      }
+
+      .map-container {
+        padding: 8px;
+      }
+    }
+  </style>
 </head>
 
 <body>
@@ -39,18 +106,14 @@
     </div>
   </header>
 
-
   <main>
 
     <!-- HERO SECTION -->
     <section class="hero">
-
       <div class="container hero-grid">
 
         <div>
-          <p class="eyebrow">
-            Dari Sabang sampai Merauke
-          </p>
+          <p class="eyebrow">Dari Sabang sampai Merauke</p>
 
           <h1>
             Kenali <span>kopi Nusantara</span>,
@@ -74,17 +137,13 @@
           </div>
         </div>
 
-
         <!-- ILUSTRASI CANGKIR KOPI -->
         <div class="hero-art" aria-hidden="true">
-
           <svg viewBox="0 0 300 260"
             xmlns="http://www.w3.org/2000/svg">
 
-            <g fill="none"
-              stroke="#c8803a"
-              stroke-width="6"
-              stroke-linecap="round">
+            <g fill="none" stroke="#c8803a"
+              stroke-width="6" stroke-linecap="round">
 
               <path class="steam"
                 d="M110 70 C95 50 125 40 110 20"/>
@@ -98,8 +157,7 @@
             </g>
 
             <ellipse cx="150" cy="215"
-              rx="115" ry="22"
-              fill="#e6d6bf"/>
+              rx="115" ry="22" fill="#e6d6bf"/>
 
             <path
               d="M60 90 H240 V150 C240 190 205 210 150 210 C95 210 60 190 60 150 Z"
@@ -107,31 +165,24 @@
 
             <path
               d="M240 105 C285 100 285 160 235 160"
-              fill="none"
-              stroke="#4a2c1a"
-              stroke-width="14"
-              stroke-linecap="round"/>
+              fill="none" stroke="#4a2c1a"
+              stroke-width="14" stroke-linecap="round"/>
 
             <ellipse cx="150" cy="92"
-              rx="90" ry="14"
-              fill="#7a4a2b"/>
+              rx="90" ry="14" fill="#7a4a2b"/>
 
             <ellipse cx="150" cy="92"
-              rx="76" ry="9"
-              fill="#c8803a"/>
+              rx="76" ry="9" fill="#c8803a"/>
 
           </svg>
-
         </div>
 
       </div>
-
     </section>
 
 
     <!-- KEISTIMEWAAN KOPI INDONESIA -->
     <section class="section alt">
-
       <div class="container">
 
         <h2>Kenapa kopi Indonesia istimewa?</h2>
@@ -139,102 +190,82 @@
         <div class="grid cols-3">
 
           <div class="card feature">
-
             <div class="icon">&#9968;</div>
-
             <h3>Tanah yang beragam</h3>
-
             <p>
               Gunung berapi, dataran tinggi, dan iklim
               tropis membuat rasa kopi tiap daerah berbeda.
             </p>
-
           </div>
 
-
           <div class="card feature">
-
             <div class="icon">&#127807;</div>
-
             <h3>Dua jenis utama</h3>
-
             <p>
               Arabika yang kompleks dan beraroma,
               serta Robusta yang pahit, kental, dan kuat.
             </p>
-
           </div>
 
-
           <div class="card feature">
-
             <div class="icon">&#9749;</div>
-
             <h3>Cara seduh khas</h3>
-
             <p>
               Dari kopi tubruk yang sederhana sampai V60
               yang rapi, semuanya bisa dicoba di rumah.
             </p>
-
           </div>
 
         </div>
-
       </div>
-
     </section>
 
 
     <!-- PETA PERSEBARAN KOPI INDONESIA -->
     <section class="section map-section">
-
       <div class="container">
 
         <div class="map-heading">
 
+          <div class="map-decoration">&#9749; &#127807; &#9749;</div>
+
           <p class="eyebrow">
-            Jelajahi Kekayaan Nusantara
+            JELAJAHI KEKAYAAN NUSANTARA
           </p>
 
-          <h2>
-            Peta Persebaran Kopi Indonesia
-          </h2>
+          <h2>Peta Persebaran Kopi Indonesia</h2>
 
           <p>
-            Indonesia memiliki beragam kopi khas dari
-            berbagai daerah. Setiap wilayah mempunyai
-            karakteristik aroma, rasa, dan keunikan tersendiri.
+            Indonesia memiliki beragam kopi khas dari berbagai
+            daerah. Setiap wilayah mempunyai karakteristik
+            aroma, rasa, dan keunikan tersendiri.
             Yuk, kenali kopi dari Sabang sampai Merauke!
           </p>
 
         </div>
 
-
         <!-- GAMBAR PETA -->
         <div class="map-container">
 
           <img
-            src="img/peta-kopi-indonesia.png"
+            src="./img/peta-kopi-indonesia.png"
             alt="Peta persebaran kopi Indonesia dari Sumatra, Jawa, Bali, Sulawesi, Flores hingga Papua"
             loading="lazy"
+            onerror="this.alt='Gambar peta belum ditemukan. Periksa folder img dan nama file.'"
           >
 
         </div>
-
 
         <p class="map-caption">
           &#9749; Kopi Nusantara - Dari Sabang sampai Merauke
         </p>
 
       </div>
-
     </section>
 
 
     <!-- REKOMENDASI KOPI -->
     <section class="section">
-
       <div class="container">
 
         <h2>Cari kopi sesuai seleramu</h2>
@@ -244,7 +275,6 @@
           kopi yang cocok.
         </p>
 
-
         <div class="picker">
 
           <label for="selera" class="hint">
@@ -252,27 +282,13 @@
           </label>
 
           <select id="selera">
-
-            <option value="">
-              -- pilih selera --
-            </option>
-
-            <option value="manis">
-              Manis dan lembut
-            </option>
-
-            <option value="segar">
-              Segar dan sedikit asam
-            </option>
-
-            <option value="kuat">
-              Kuat, pekat, dan pahit
-            </option>
-
+            <option value="">-- pilih selera --</option>
+            <option value="manis">Manis dan lembut</option>
+            <option value="segar">Segar dan sedikit asam</option>
+            <option value="kuat">Kuat, pekat, dan pahit</option>
           </select>
 
         </div>
-
 
         <div
           id="rekom"
@@ -281,13 +297,11 @@
         </div>
 
       </div>
-
     </section>
 
 
     <!-- FAKTA KOPI -->
     <section class="section alt">
-
       <div class="container">
 
         <div class="fact-box">
@@ -308,7 +322,6 @@
         </div>
 
       </div>
-
     </section>
 
   </main>
@@ -316,13 +329,11 @@
 
   <!-- FOOTER -->
   <footer class="site-footer">
-
     <p>
       &copy; 2026 Kopi Nusantara -
       dibuat oleh Ririn Ida Aulia,
       XII RPL | Proyek Akhir Cloud Computing
     </p>
-
   </footer>
 
 
