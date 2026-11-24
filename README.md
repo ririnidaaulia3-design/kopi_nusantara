@@ -30,13 +30,13 @@ Proyek Akhir Cloud Computing - Mini Web Deployment
 
 ```
 index.html
+img/              (opsional: foto kopi, misalnya gayo.jpg, toraja.jpg)
 jenis.html
 seduh.html
 kontak.html
 style.css
 script.js
-README.md
-img/            (opsional: foto kopi, misalnya gayo.jpg, toraja.jpg)
+README.md       
 ```
 
 ## Menambah Foto
