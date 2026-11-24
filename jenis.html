@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -25,7 +26,10 @@
     <div class="container">
       <p class="eyebrow">Katalog</p>
       <h1>Jenis Kopi per Daerah</h1>
-      <p class="lead">Pilih daerah lewat tab, atau ketik nama kopi di kolom pencarian. Tekan &ldquo;Suka&rdquo; untuk menyimpan kopi favoritmu.</p>
+      <p class="lead">
+        Pilih daerah lewat tab, atau ketik nama kopi di kolom pencarian.
+        Tekan "Suka" untuk menyimpan kopi favoritmu.
+      </p>
 
       <div class="toolbar">
         <div id="tabs" class="tabs" role="group" aria-label="Filter daerah">
@@ -38,19 +42,31 @@
           <button type="button" data-daerah="Papua">Papua</button>
           <button type="button" data-daerah="Favorit">&#9733; Favorit</button>
         </div>
-        <input id="search" class="search" type="text" placeholder="Cari kopi, misalnya: gayo" aria-label="Cari kopi">
+
+        <input
+          id="search"
+          class="search"
+          type="text"
+          placeholder="Cari kopi, misalnya: gayo"
+          aria-label="Cari kopi">
       </div>
 
       <p id="count" class="count" aria-live="polite"></p>
+
+      <!-- Daftar jenis kopi ditampilkan melalui script.js -->
       <div id="grid" class="grid cols-auto"></div>
 
-      <p class="hint" style="margin-top:28px">Catatan: deskripsi rasa bersifat umum. Hasil nyata bisa berbeda tergantung petani, proses pascapanen, dan tingkat sangrai.</p>
+      <p class="hint" style="margin-top:28px">
+        Catatan: deskripsi rasa bersifat umum. Hasil nyata bisa berbeda
+        tergantung petani, proses pascapanen, dan tingkat sangrai.
+      </p>
     </div>
   </main>
 
   <footer class="site-footer">
     <p>&copy; 2026 Kopi Nusantara - dibuat oleh Nama Kamu, XII RPL | Proyek Akhir Cloud Computing</p>
   </footer>
+
   <script src="script.js"></script>
 </body>
 </html>
