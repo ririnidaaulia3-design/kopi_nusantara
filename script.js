@@ -486,16 +486,10 @@ function createCoffeeCard(coffee) {
 
   return `
     <article class="card coffee-card">
-
-      <div class="coffee-icon" aria-hidden="true">
-        ☕
-      </div>
+      <div class="coffee-icon" aria-hidden="true">☕</div>
 
       <div class="coffee-info">
-
-        <span class="eyebrow">
-          ${coffee.daerah}
-        </span>
+        <span class="eyebrow">${coffee.daerah}</span>
 
         <h3>${coffee.nama}</h3>
 
@@ -509,9 +503,7 @@ function createCoffeeCard(coffee) {
           ${coffee.jenis}
         </p>
 
-        <p>
-          ${coffee.profil}
-        </p>
+        <p>${coffee.profil}</p>
 
         <p>
           <strong>Rekomendasi seduh:</strong>
@@ -526,7 +518,6 @@ function createCoffeeCard(coffee) {
         >
           ${favorite ? "★ Disukai" : "☆ Suka"}
         </button>
-
       </div>
     </article>
   `;
@@ -539,7 +530,7 @@ function renderCoffees() {
     ? searchInput.value.toLowerCase().trim()
     : "";
 
-  let filtered = COFFEES.filter(function (coffee) {
+  const filtered = COFFEES.filter(function (coffee) {
 
     const cocokDaerah =
       activeRegion === "Semua" ||
@@ -812,23 +803,45 @@ if (contactForm) {
 
   contactForm.addEventListener("submit", function (event) {
 
-    const nama = document.getElementById("nama");
-    const email = document.getElementById("email");
-    const pesan = document.getElementById("pesan");
+    const nama = document.getElementById("c-name");
+    const email = document.getElementById("c-email");
+    const pesan = document.getElementById("c-msg");
 
-    if (
-      (nama && !nama.value.trim()) ||
-      (email && !email.value.trim()) ||
-      (pesan && !pesan.value.trim())
-    ) {
+    const errNama = document.getElementById("err-name");
+    const errEmail = document.getElementById("err-email");
+    const errPesan = document.getElementById("err-msg");
 
+    let valid = true;
+
+    if (errNama) errNama.textContent = "";
+    if (errEmail) errEmail.textContent = "";
+    if (errPesan) errPesan.textContent = "";
+
+    if (!nama || !nama.value.trim()) {
+      if (errNama) errNama.textContent = "Nama wajib diisi.";
+      valid = false;
+    }
+
+    if (!email || !email.value.trim()) {
+      if (errEmail) errEmail.textContent = "Email wajib diisi.";
+      valid = false;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) {
+      if (errEmail) errEmail.textContent = "Format email tidak valid.";
+      valid = false;
+    }
+
+    if (!pesan || pesan.value.trim().length < 10) {
+      if (errPesan) errPesan.textContent = "Pesan minimal 10 karakter.";
+      valid = false;
+    }
+
+    if (!valid) {
       event.preventDefault();
-
-      alert("Mohon lengkapi semua kolom terlebih dahulu.");
-
       return;
     }
 
+    event.preventDefault();
+    alert("Pesan berhasil diperiksa. Terima kasih sudah menghubungi kami!");
   });
 
 }
@@ -843,6 +856,14 @@ const totalCoffee = document.getElementById("total-coffee");
 if (totalCoffee) {
   totalCoffee.textContent = COFFEES.length;
 }
+
+
+/* =====================================================
+   11. CEK JUMLAH DATA KOPI
+   ===================================================== */
+
+console.log("TOTAL KOPI:", COFFEES.length);
+console.log("DAFTAR KOPI:", COFFEES);
 
 
 /* =====================================================
