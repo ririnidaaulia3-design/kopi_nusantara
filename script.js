@@ -42,7 +42,6 @@ if (menuBtn && nav) {
 const COFFEES = [
 
   // SUMATRA
-
   {
     id: "gayo",
     nama: "Kopi Gayo",
@@ -145,7 +144,6 @@ const COFFEES = [
   },
 
   // JAWA
-
   {
     id: "preanger",
     nama: "Java Preanger",
@@ -228,7 +226,6 @@ const COFFEES = [
   },
 
   // BALI
-
   {
     id: "kintamani",
     nama: "Kopi Kintamani",
@@ -251,7 +248,6 @@ const COFFEES = [
   },
 
   // SULAWESI
-
   {
     id: "toraja",
     nama: "Kopi Toraja",
@@ -304,7 +300,6 @@ const COFFEES = [
   },
 
   // NUSA TENGGARA
-
   {
     id: "bajawa",
     nama: "Kopi Bajawa",
@@ -367,7 +362,6 @@ const COFFEES = [
   },
 
   // PAPUA
-
   {
     id: "wamena",
     nama: "Kopi Wamena",
@@ -418,7 +412,6 @@ const COFFEES = [
     profil: "Memiliki karakter rasa lembut dengan aroma khas dan sentuhan cokelat.",
     seduh: "V60 atau French Press"
   }
-
 ];
 
 
@@ -452,9 +445,7 @@ function isFavorite(id) {
 
 function toggleFavorite(id) {
   if (isFavorite(id)) {
-    favorites = favorites.filter(function (item) {
-      return item !== id;
-    });
+    favorites = favorites.filter(item => item !== id);
   } else {
     favorites.push(id);
   }
@@ -484,19 +475,11 @@ function createCoffeeCard(coffee) {
 
       <div class="coffee-info">
         <span class="eyebrow">${coffee.daerah}</span>
-
         <h3>${coffee.nama}</h3>
-
         <p><strong>Asal:</strong> ${coffee.asal}</p>
-
         <p><strong>Jenis:</strong> ${coffee.jenis}</p>
-
         <p>${coffee.profil}</p>
-
-        <p>
-          <strong>Rekomendasi seduh:</strong>
-          ${coffee.seduh}
-        </p>
+        <p><strong>Rekomendasi seduh:</strong> ${coffee.seduh}</p>
 
         <button
           type="button"
@@ -573,7 +556,6 @@ if (searchInput) {
 if (grid) {
   grid.addEventListener("click", function (event) {
     const button = event.target.closest("[data-favorite]");
-
     if (!button) return;
 
     toggleFavorite(button.dataset.favorite);
@@ -602,11 +584,6 @@ if (selera && rekom) {
     const hasil = COFFEES.filter(function (coffee) {
       return coffee.selera === pilihan;
     });
-
-    if (hasil.length === 0) {
-      rekom.innerHTML = "<p>Belum ada rekomendasi kopi.</p>";
-      return;
-    }
 
     rekom.innerHTML = hasil.slice(0, 6).map(function (coffee) {
       return `
@@ -677,7 +654,7 @@ const brewMethods = {
     suhu: "90–95°C",
     waktu: "4 menit",
     durasi: 240,
-    gram: 16.7,
+    gram: 15,
     langkah: [
       "Siapkan kopi bubuk dengan gilingan sedang hingga kasar.",
       "Masukkan sekitar 17 gram kopi ke dalam cangkir.",
@@ -695,7 +672,7 @@ const brewMethods = {
     suhu: "90–96°C",
     waktu: "3 menit",
     durasi: 180,
-    gram: 16.7,
+    gram: 15,
     langkah: [
       "Siapkan dripper V60, kertas filter, teko, dan server.",
       "Letakkan kertas filter pada dripper.",
@@ -714,7 +691,7 @@ const brewMethods = {
     suhu: "92–96°C",
     waktu: "4 menit",
     durasi: 240,
-    gram: 16.7,
+    gram: 15,
     langkah: [
       "Siapkan French Press dan kopi dengan gilingan kasar.",
       "Masukkan sekitar 17 gram kopi ke dalam wadah.",
@@ -778,6 +755,98 @@ function updateCoffeeCalculator() {
     `Kamu membutuhkan sekitar ${jumlahKopi.toFixed(1)} gram kopi untuk ${jumlahAir} ml air.`;
 }
 
+
+/* =====================================================
+   8. TIMER CARA SEDUH
+   ===================================================== */
+
+const timerStart = document.getElementById("t-start");
+const timerReset = document.getElementById("t-reset");
+const timerDisplay = document.getElementById("timer-display");
+const timerBar = document.getElementById("timer-bar");
+
+let timerInterval = null;
+let remainingSeconds = brewMethods.tubruk.durasi;
+let totalSeconds = brewMethods.tubruk.durasi;
+
+function displayTimer() {
+  if (!timerDisplay) return;
+
+  const minutes = Math.floor(remainingSeconds / 60);
+  const seconds = remainingSeconds % 60;
+
+  timerDisplay.textContent =
+    `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+
+  if (timerBar) {
+    const progress =
+      ((totalSeconds - remainingSeconds) / totalSeconds) * 100;
+
+    timerBar.style.width = `${progress}%`;
+  }
+}
+
+function resetBrewTimer() {
+  clearInterval(timerInterval);
+  timerInterval = null;
+
+  totalSeconds = brewMethods[activeMethod].durasi;
+  remainingSeconds = totalSeconds;
+
+  if (timerStart) {
+    timerStart.textContent = "Mulai";
+    timerStart.disabled = false;
+  }
+
+  displayTimer();
+}
+
+function finishBrewTimer() {
+  clearInterval(timerInterval);
+  timerInterval = null;
+
+  if (timerDisplay) {
+    timerDisplay.textContent = "Selesai!";
+  }
+
+  if (timerBar) {
+    timerBar.style.width = "100%";
+  }
+
+  if (timerStart) {
+    timerStart.textContent = "Mulai Lagi";
+    timerStart.disabled = false;
+  }
+
+  alert("Waktu seduh selesai! Kopi siap dinikmati ☕");
+}
+
+if (timerStart) {
+  timerStart.addEventListener("click", function () {
+    if (timerInterval !== null) return;
+
+    if (remainingSeconds <= 0) {
+      resetBrewTimer();
+    }
+
+    timerStart.textContent = "Berjalan...";
+    timerStart.disabled = true;
+
+    timerInterval = setInterval(function () {
+      remainingSeconds--;
+      displayTimer();
+
+      if (remainingSeconds <= 0) {
+        finishBrewTimer();
+      }
+    }, 1000);
+  });
+}
+
+if (timerReset) {
+  timerReset.addEventListener("click", resetBrewTimer);
+}
+
 function selectBrewMethod(metode) {
   if (!brewMethods[metode]) return;
 
@@ -825,104 +894,7 @@ if (methodTabs && infoNama && langkah) {
   selectBrewMethod("tubruk");
 }
 
-
-/* =====================================================
-   8. TIMER CARA SEDUH
-   SESUAI DENGAN METODE YANG DIPILIH
-   ===================================================== */
-
-const timerStart = document.getElementById("t-start");
-const timerReset = document.getElementById("t-reset");
-const timerDisplay = document.getElementById("timer-display");
-const timerBar = document.getElementById("timer-bar");
-
-let timerInterval = null;
-let remainingSeconds = brewMethods.tubruk.durasi;
-let totalSeconds = brewMethods.tubruk.durasi;
-
-function displayTimer() {
-  if (!timerDisplay) return;
-
-  const minutes = Math.floor(remainingSeconds / 60);
-  const seconds = remainingSeconds % 60;
-
-  timerDisplay.textContent =
-    `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
-
-  if (timerBar) {
-    const progress = totalSeconds > 0
-      ? ((totalSeconds - remainingSeconds) / totalSeconds) * 100
-      : 0;
-
-    timerBar.style.width = `${progress}%`;
-  }
-}
-
-function resetBrewTimer() {
-  clearInterval(timerInterval);
-  timerInterval = null;
-
-  totalSeconds = brewMethods[activeMethod].durasi;
-  remainingSeconds = totalSeconds;
-
-  if (timerStart) {
-    timerStart.textContent = "Mulai";
-    timerStart.disabled = false;
-  }
-
-  displayTimer();
-}
-
-function finishBrewTimer() {
-  clearInterval(timerInterval);
-  timerInterval = null;
-
-  if (timerDisplay) {
-    timerDisplay.textContent = "Selesai!";
-  }
-
-  if (timerBar) {
-    timerBar.style.width = "100%";
-  }
-
-  if (timerStart) {
-    timerStart.textContent = "Mulai Lagi";
-    timerStart.disabled = false;
-  }
-
-  alert("Waktu seduh selesai! Kopi siap dinikmati ☕");
-}
-
-if (timerStart) {
-  timerStart.addEventListener("click", function () {
-    if (timerInterval) return;
-
-    if (remainingSeconds <= 0) {
-      resetBrewTimer();
-    }
-
-    timerStart.textContent = "Berjalan...";
-    timerStart.disabled = true;
-
-    timerInterval = setInterval(function () {
-      remainingSeconds--;
-
-      displayTimer();
-
-      if (remainingSeconds <= 0) {
-        finishBrewTimer();
-      }
-    }, 1000);
-  });
-}
-
-if (timerReset) {
-  timerReset.addEventListener("click", resetBrewTimer);
-}
-
-if (timerDisplay) {
-  displayTimer();
-}
+displayTimer();
 
 
 /* =====================================================
